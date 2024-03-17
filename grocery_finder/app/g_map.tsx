@@ -28,6 +28,11 @@
 <body>
     <h1>Florida Grocery Stores Map</h1>
     <div id="map-container">
+	    <div>
+        <input type="text" id="address-input" placeholder="Enter address">
+        <button onclick="searchAddress()">Search</button>
+    </div>
+	
         <div id="map"></div>
         <div id="store-list"></div>
     </div>
@@ -38,11 +43,33 @@
             var florida = { lat: 27.994402, lng: -81.760254 }; // Center map at Florida
 
             map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 7,
+                zoom: 12,
                 center: florida
             });
 
             service = new google.maps.places.PlacesService(map);
+			
+			var input = document.getElementById('address-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', map);
+
+            autocomplete.addListener('place_changed', function() {
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    window.alert("No details available for input: '" + place.name + "'");
+                    return;
+                }
+
+                map.setCenter(place.geometry.location);
+                map.setZoom(12);
+            });
+			
+			// Trigger search on Enter key press
+            input.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    searchAddress();
+                }
+            });
 
             // Listen for map movement events
             map.addListener('idle', function() {
@@ -105,7 +132,44 @@
             storeList.appendChild(storeItem);
         }
     </script>
+		
     <!-- Load the Google Maps JavaScript API with your API key -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFU9LDbuTb6JYNZ6oe7PSPI1NzC5PUzlQ&libraries=places&callback=initMap" async defer></script>
+
+    <script>
+        // Function to fetch API key from server
+        function fetchApiKey(callback) {
+            fetch('config.json')
+                .then(response => response.json())
+                .then(data => {
+                    const apiKey = data.GOOGLE_MAPS_API_KEY;
+                    callback(apiKey);
+                })
+                .catch(error => {
+                    console.error('Error fetching API key:', error);
+                    callback(null);
+                });
+        }
+
+        // Function to load Google Maps JavaScript API with API key
+        function loadGoogleMaps(apiKey) {
+            if (!apiKey) {
+                console.error('API key not found.');
+                return;
+            }
+
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`;
+            document.head.appendChild(script);
+        }
+
+        // Call fetchApiKey and loadGoogleMaps when DOM content is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchApiKey(loadGoogleMaps);
+        });
+    </script>	
+
+
+	
+	
 </body>
 </html>
