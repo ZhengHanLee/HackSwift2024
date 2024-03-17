@@ -108,15 +108,29 @@
 
         // Create markers for each place found
         function createMarker(place) {
+			var grocery_icon = {
+				//   url: place.icon,
+                  url: 'https://s3.amazonaws.com/media.axprts.org/photos/KL1.jpg',
+				  size: new google.maps.Size(100, 100),
+				  origin: new google.maps.Point(0, 0),
+				  anchor: new google.maps.Point(17, 34),
+				  scaledSize: new google.maps.Size(50, 50),
+                   };
+					
             var marker = new google.maps.Marker({
                 map: map,
+				icon: grocery_icon,
                 position: place.geometry.location,
                 title: place.name
             });
 
+            const content_str = "<div><strong>" +place.name + "</strong><br>"+place.vicinity+"<br>"+ "<a href='https://www.google.com/maps/search/?api=1&query==" + place.name + ", "+ place.vicinity + "' target='_blank' style='color: blue; text-decoration: underline;'>View on Google Maps</a> </div>"            
+            // <a href="https://www.google.com/maps/search/?api=1&query=${place.name}, ${place.vicinity}" target="_blank" style="color: blue; text-decoration: underline;">View on Google Maps</a>            
+
             var infowindow = new google.maps.InfoWindow({
-                content: '<strong>' + place.name + '</strong><br>' + place.vicinity
+                content: content_str
             });
+
 
             marker.addListener('click', function() {
                 infowindow.open(map, marker);
