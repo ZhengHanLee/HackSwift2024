@@ -8,9 +8,14 @@ export default function GoogleMaps() {
 
 	useEffect(() => {
 		const initializeMap = async () => {
+      // Check if API key exists
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+      if (!apiKey) {
+          console.error('Google Maps API key is not provided.');
+          return;
+      }
 			const loader = new Loader({
-				apiKey: 'AIzaSyBFU9LDbuTb6JYNZ6oe7PSPI1NzC5PUzlQ',
-				version: 'quarterly',
+				apiKey,
         libraries: ['places'],
 			});
 
