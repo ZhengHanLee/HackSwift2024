@@ -1,14 +1,15 @@
 import GoogleMaps from "@/components/GoogleMaps";
-import Head from "next/head";
+import Image from "next/image";
+import groceryImage from "./grocery.png";
+
 
 export default function Home() {
   return (
     <>
-    <Head>
-      <link rel="icon" href="/favicon.ico"/>
-    </Head>
-   <div className="py-8">
-    <div className="flex justify-center items-center text-[24px] text-rose-600">
+   <div className="py-5">
+   
+    <div className="flex justify-center text-[24px] text-black-600 mb-5">
+    <Image src={groceryImage} alt="grocery icon" width={32} height={32} className="mr-2"/>
       Grocery Finder
     </div>
     <GoogleMaps/>

@@ -31,7 +31,7 @@ export default function GoogleMaps() {
                 document.getElementById('search-box') as HTMLInputElement
             );
 
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(
                 document.getElementById('search-box-container') as HTMLElement
             );
 
@@ -92,7 +92,7 @@ export default function GoogleMaps() {
                 // Search for grocery stores nearby
                 const request: google.maps.places.PlaceSearchRequest = {
                     location: places[0].geometry!.location!,
-                    radius: 5000, // 5km radius
+                    radius: 5000,
                     keyword: 'grocery store',
                 };
                 
@@ -157,13 +157,13 @@ export default function GoogleMaps() {
     }, []);
 
     return (
-        <div className="h-[700px]">
-            <div id="search-box-container" style={{ position: 'absolute', top: 10, left: 10 }}>
+        <div className="h-[700px] flex flex-col items-center">
+            <div id="search-box-container" className="relative justify-center flex py-0.5">
                 <input
                     id="search-box"
                     type="text"
                     placeholder="Search for places"
-                    style={{ width: '300px', padding: '6px' }}
+                    style={{ width: '300px', padding: '8px' , borderRadius: '10px', textAlign: 'center', fontSize: '16px', border: '1.5px solid black'}}
                 />
             </div>
             <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
