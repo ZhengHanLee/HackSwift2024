@@ -109,8 +109,7 @@
         // Create markers for each place found
         function createMarker(place) {
 			var grocery_icon = {
-				//   url: place.icon,
-                  url: 'https://s3.amazonaws.com/media.axprts.org/photos/KL1.jpg',
+				  url: place.icon,
 				  size: new google.maps.Size(100, 100),
 				  origin: new google.maps.Point(0, 0),
 				  anchor: new google.maps.Point(17, 34),
