@@ -95,6 +95,9 @@ export default function GoogleMaps() {
                     radius: 5000, // 5km radius
                     keyword: 'grocery store',
                 };
+                
+                //Keep track of current info window to close it
+                let currentInfoWindow : google.maps.InfoWindow | null = null;
 
                 const service = new google.maps.places.PlacesService(map);
                 service.nearbySearch(request, (results, status) => {
@@ -117,6 +120,8 @@ export default function GoogleMaps() {
                             });
                             markers.push(marker);
                             bounds.extend(place.geometry!.location!);
+
+                            
                             // Info window for grocery store markers
                             const infowindow = new google.maps.InfoWindow({
                               content: `
@@ -127,10 +132,15 @@ export default function GoogleMaps() {
                                   </div>
                               `,
                           });
-
+                            
                           // Open info window when marker is clicked
                           marker.addListener('click', () => {
+                            if (currentInfoWindow){
+                                currentInfoWindow.close();
+                            }
+                            
                               infowindow.open(map, marker);
+                              currentInfoWindow = infowindow;
                           });
                         });
                         // Fit the map bounds to include both the searched location and nearby grocery stores
